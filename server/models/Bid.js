@@ -13,9 +13,3 @@ export const Bid = sequelize.define("Bid", {
     allowNull: false,
   },
 });
-
-/**
- * Colocar auction_id -> esta bid pertenece a que Auction a que subasta
- * user_id -> Un usuario puede tener muchas bids
- *  Date se coloca solo
- * */
