@@ -1,13 +1,17 @@
 import express from "express";
 import { connectDB, sequelize } from "./config/index.js";
+
 import { User, Bid, Auction, Product } from "./models/index.js";
+import { productRoutes, auctionRoutes, userRoutes, bidRoutes} from "./routes/index.js"
 
-import productRoutes from "./routes/product.routes.js";
-
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(express.json());
-app.use(productRoutes);
+app.use("/api", productRoutes);
+app.use("/api", auctionRoutes);
+app.use("/api", userRoutes);
+app.use("/api", bidRoutes);
 
 const main = async () => {
   await sequelize.sync({ force: false, logging: false });
