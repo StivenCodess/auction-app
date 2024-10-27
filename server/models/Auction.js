@@ -36,7 +36,3 @@ Auction.hasMany(Bid, {
 Bid.belongsTo(Auction, {
   foreignKey: "auction_id",
 });
-
-Product.belongsTo(Auction, {
-  foreignKey: "auction_id",
-});

@@ -1,8 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/index.js";
 
-import { Auction } from "./index.js";
-
 export const Product = sequelize.define("Product", {
   id: {
     type: DataTypes.INTEGER,
@@ -25,5 +23,9 @@ export const Product = sequelize.define("Product", {
   price: {
     type: DataTypes.FLOAT,
     allowNull: false,
+  },
+  isListedInMarket: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true, 
   },
 });
