@@ -27,13 +27,3 @@ export const Product = sequelize.define("Product", {
     allowNull: false,
   },
 });
-
-Product.belongsToMany(Auction, {
-  foreignKey: "product_id",
-  through: "Auction_Product",
-});
-
-Auction.belongsToMany(Product, {
-  foreignKey: "auction_id",
-  through: "Auction_Product",
-});
