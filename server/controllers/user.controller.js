@@ -1,4 +1,5 @@
 import { User } from "../models/index.js";
+import { admin } from "../config/index.js";
 
 export const getUsers = async (req, res) => {
   try {
@@ -21,16 +22,33 @@ export const getUserByIndex = async (req, res) => {
   }
 };
 
+const firebaseCreateUser = async (email, password) => {
+  try {
+    const userRecord = await admin.auth().createUser({
+      email,
+      password,
+    });
+    return userRecord.uid;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createUser = async (req, res) => {
   try {
-    const { name, email, address, phone, role_id } = req.body;
+    const { name, email, address, phone, role_id, password } = req.body;
+    const uid = await firebaseCreateUser(email, password);
+
     const newuser = await User.create({
+      id: uid,
       name,
       email,
       address,
       phone,
       role_id,
+      password,
     });
+
     res.status(201).json(newuser);
   } catch (error) {
     res.status(500).json({ error: "Failed to create user" });
