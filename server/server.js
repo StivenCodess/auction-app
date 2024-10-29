@@ -1,6 +1,10 @@
 import express from "express";
-import { connectDB, sequelize } from "./config/index.js";
+import http from "http";
+import { Server } from "socket.io";
+import cors from "cors";
 
+import { admin } from "./config/index.js";
+import { connectDB, sequelize } from "./config/index.js";
 import { User, Bid, Auction, Product, Role } from "./models/index.js";
 import {
   productRoutes,
@@ -11,12 +15,31 @@ import {
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "http://localhost:5173" },
+});
 
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
+
 app.use("/api", productRoutes);
 app.use("/api", auctionRoutes);
 app.use("/api", userRoutes);
 app.use("/api", bidRoutes);
+
+io.on("connection", (socket) => {
+  console.log(`User Connected ${socket.id}`);
+
+  socket.on("newBid", (data) => {
+    console.log("New bid received:", data);
+    io.emit(`auction:${data.auctionId}`, data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
 
 const main = async () => {
   await sequelize.sync({ force: false, logging: false });
@@ -28,8 +51,10 @@ const main = async () => {
     { name: "User" },
     { name: "Manager" },
   ]);
-  */
-  app.listen(5000);
+*/
+
+  server.listen(5000);
+
   console.log("Server ins running on port", 5000);
 };
 
