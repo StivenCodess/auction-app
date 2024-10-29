@@ -25,14 +25,10 @@ export const Auction = sequelize.define("Auction", {
 });
 
 Auction.hasMany(Product, {
-  foreignKey: "product_id",
+  foreignKey: "auction_id",
   sourceKey: "id",
 });
+Auction.hasMany(Bid, { foreignKey: "auction_id" });
 
-Auction.hasMany(Bid, {
-  foreignKey: "auction_id",
-});
-
-Bid.belongsTo(Auction, {
-  foreignKey: "auction_id",
-});
+Product.belongsTo(Auction, { foreignKey: "auction_id" });
+Bid.belongsTo(Auction, { foreignKey: "auction_id" });
