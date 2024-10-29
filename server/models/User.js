@@ -5,10 +5,9 @@ import { Bid } from "./index.js";
 
 export const User = sequelize.define("User", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true,
     allowNull: false,
-    autoIncrement: true,
   },
   name: {
     type: DataTypes.TEXT,
