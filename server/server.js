@@ -3,7 +3,6 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 
-import { admin } from "./config/index.js";
 import { connectDB, sequelize } from "./config/index.js";
 import { User, Bid, Auction, Product, Role } from "./models/index.js";
 import {
@@ -44,18 +43,16 @@ io.on("connection", (socket) => {
 const main = async () => {
   await sequelize.sync({ force: false, logging: false });
 
-  /* ADD ROLES TO DEV */
-  /*
-  await Role.bulkCreate([
-    { name: "Admin" },
-    { name: "User" },
-    { name: "Manager" },
-  ]);
-*/
+  /ADD ROLES TO DEV */;
 
-  server.listen(5000);
+  // await Role.bulkCreate([
+  //   { name: "Admin" },
+  //   { name: "User" },
+  //   { name: "Manager" },
+  // ]);
 
-  console.log("Server ins running on port", 5000);
+  server.listen(PORT);
+  console.log("Server ins running on port", PORT);
 };
 
 main();
