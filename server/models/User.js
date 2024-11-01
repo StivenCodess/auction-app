@@ -4,8 +4,9 @@ import { sequelize } from "../config/index.js";
 import { Bid } from "./index.js";
 
 export const User = sequelize.define("User", {
-  id: {
-    type: DataTypes.STRING,
+  uid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
   },
@@ -26,11 +27,15 @@ export const User = sequelize.define("User", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 User.hasMany(Bid, {
   foreignKey: "user_id",
-  sourceKey: "id",
+  sourceKey: "uid",
 });
 
 Bid.belongsTo(User, {
