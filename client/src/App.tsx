@@ -1,10 +1,17 @@
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import { store } from "./store";
+import AppRouter from "./router/AppRouter";
 import "./App.css";
 
 const App = () => {
   return (
-    <>
-      <h1>Auction App</h1>
-    </>
+    <Provider store={store}>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </Provider>
   );
 };
 
