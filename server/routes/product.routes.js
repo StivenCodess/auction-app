@@ -10,8 +10,11 @@ import {
 } from "../controllers/index.js";
 
 import { createProductSchema } from "../validators/product/createProductSchema.js";
+import { revalidateToken } from "../middlewares/revalidateToken.js";
 
 const router = Router();
+
+router.use(revalidateToken);
 
 router.post("/product", checkSchema(createProductSchema), createProduct);
 router.get("/products", getProducts);

@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-
 import { response } from "express";
 import { verifyToken } from "../helpers/jwt.js";
 
@@ -8,10 +6,14 @@ export const revalidateToken = (req, res = response, next) => {
   if (!token) return res.status(401).json({ ok: false, error: "Not Token" });
 
   try {
-    const { name, uid } = verifyToken(token);
+    const { name, uid, iat, exp } = verifyToken(token);
 
-    req.name = name;
-    req.uid = uid;
+    req.authToken = {
+      name,
+      uid,
+      iat,
+      exp,
+    };
   } catch (error) {
     return res.status(401).json({ ok: false, error: "No valid Token" });
   }

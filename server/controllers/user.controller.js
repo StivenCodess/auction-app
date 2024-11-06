@@ -90,7 +90,7 @@ export const loginUser = async (req, res) => {
 };
 
 export const revalidateTokenController = async (req, res) => {
-  const { name, uid } = req;
+  const { name, uid } = req.authToken;
 
   const token = generateToken({ name, uid });
 

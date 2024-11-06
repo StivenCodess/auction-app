@@ -22,9 +22,9 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
 
+app.use("/api", userRoutes);
 app.use("/api", productRoutes);
 app.use("/api", auctionRoutes);
-app.use("/api", userRoutes);
 app.use("/api", bidRoutes);
 
 io.on("connection", (socket) => {
@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
 const main = async () => {
   await sequelize.sync({ force: false, logging: false });
 
-  /ADD ROLES TO DEV */;
+  //ADD ROLES TO DEV */;
 
   // await Role.bulkCreate([
   //   { name: "Admin" },
