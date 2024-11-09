@@ -6,11 +6,17 @@ export const revalidateToken = (req, res = response, next) => {
   if (!token) return res.status(401).json({ ok: false, error: "Not Token" });
 
   try {
-    const { name, uid, iat, exp } = verifyToken(token);
+    const { name, uid, address, role_id, phone, email, photo_url, iat, exp } =
+      verifyToken(token);
 
     req.authToken = {
       name,
       uid,
+      address,
+      role_id,
+      phone,
+      email,
+      photo_url,
       iat,
       exp,
     };

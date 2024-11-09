@@ -20,6 +20,7 @@ const router = Router();
 
 router.post("/user", checkSchema(createUserSchema), registerUser);
 router.post("/user/login", checkSchema(loginSchema), loginUser);
+
 router.get("/users", getUsers);
 router.get("/users/:id", getUserByIndex);
 router.put("/users/:id", updateUser);
