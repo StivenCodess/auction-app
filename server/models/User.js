@@ -31,6 +31,9 @@ export const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  photo_url: {
+    type: DataTypes.STRING,
+  },
 });
 
 User.hasMany(Bid, {
