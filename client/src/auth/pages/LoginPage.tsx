@@ -1,6 +1,9 @@
-import styles from "../styles/LoginPage.module.css";
-import useForm from "../../hooks/useForm";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useAuthStore } from "../../hooks";
+
+import useForm from "../../hooks/useForm";
+import styles from "../styles/LoginPage.module.css";
 
 const LoginPage = () => {
   const { email, password, onInputChange, onResetForm } = useForm({
@@ -18,28 +21,31 @@ const LoginPage = () => {
   };
 
   return (
-    <form action="" onSubmit={handleSubmit} className={styles.formState}>
-      <label htmlFor="">
-        Email
-        <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={onInputChange}
-        />
-      </label>
-      <label htmlFor="">
-        Password
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={onInputChange}
-        />
-      </label>
+    <>
+      <h1>Login</h1>
+      <form action="" onSubmit={handleSubmit} className={styles.formState}>
+        <label htmlFor="">
+          Email
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={onInputChange}
+          />
+        </label>
+        <label htmlFor="">
+          Password
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={onInputChange}
+          />
+        </label>
 
-      <button type="submit">Login</button>
-    </form>
+        <button type="submit">Login</button>
+      </form>
+    </>
   );
 };
 
