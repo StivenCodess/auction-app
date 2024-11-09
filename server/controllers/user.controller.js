@@ -27,7 +27,14 @@ export const getUserByIndex = async (req, res) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, address, phone, role_id, password } = req.body;
+    const {
+      name: userName,
+      email: userEmail,
+      address: userAddress,
+      phone: userPhone,
+      role_id: userRoleId,
+      password,
+    } = req.body;
 
     const errors = validationResult(req);
 
@@ -38,19 +45,21 @@ export const registerUser = async (req, res) => {
     const encryptedPassword = bcrypt.hashSync(password, salt);
 
     const newuser = await User.create({
-      name,
-      email,
-      address,
-      phone,
-      role_id,
+      name: userName,
+      email: userEmail,
+      address: userAddress,
+      phone: userPhone,
+      role_id: userRoleId,
       password: encryptedPassword,
     });
 
-    const token = generateToken({ name, uid: newuser.uid });
+    const { uid, name, email, address, phone, role_id } = newuser;
+
+    const token = generateToken({ uid, name, email, address, phone, role_id });
 
     res.status(201).json({
       ok: true,
-      newuser,
+      ...newuser,
       token,
     });
   } catch (error) {
@@ -60,27 +69,41 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email_user, password_user } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email: email_user } });
 
     if (!user)
       return res.status(404).json({ error: "User not found in the database" });
 
-    const validPassword = bcrypt.compareSync(password, user.password);
+    const { uid, name, email, address, phone, password, photo_url, role_id } =
+      user;
+
+    const validPassword = bcrypt.compareSync(password_user, password);
 
     if (!validPassword)
       return res.status(400).json({ error: "Incorrect password" });
 
-    const token = generateToken({ name: user.name, uid: user.uid });
+    const token = generateToken({
+      uid,
+      name,
+      address,
+      phone,
+      email,
+      photo_url,
+      role_id,
+    });
 
     res.status(200).json({
       ok: true,
-      uid: user.uid,
-      name: user.name,
-      role: user.role_id,
-      email: user.email,
+      uid,
+      name,
+      role_id,
+      address,
+      phone,
+      email,
+      photo_url,
       token,
     });
   } catch (error) {
@@ -90,22 +113,41 @@ export const loginUser = async (req, res) => {
 };
 
 export const revalidateTokenController = async (req, res) => {
-  const { name, uid } = req.authToken;
+  const { name, uid, address, role_id, phone, email, photo_url } =
+    req.authToken;
 
-  const token = generateToken({ name, uid });
+  const token = generateToken({
+    name,
+    uid,
+    address,
+    role_id,
+    phone,
+    email,
+    photo_url,
+  });
 
-  res.send({ ok: true, token });
+  res.send({
+    ok: true,
+    token,
+    name,
+    uid,
+    address,
+    role_id,
+    phone,
+    email,
+    photo_url,
+  });
 };
 
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, address, phone, role_id } = req.body;
+    const { name, email, address, phone, role_id, photo_url } = req.body;
 
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ error: "user not found" });
 
-    user.update({ name, email, address, phone, role_id });
+    user.update({ name, email, address, phone, role_id, photo_url });
     res.status(200).json({ ok: true, user });
   } catch (error) {
     res.status(500).json({ error: "Failed to update user" });
