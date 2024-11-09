@@ -1,0 +1,15 @@
+.avatar__image {
+  border: 1px solid;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 100%;
+}
+
+.info__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
