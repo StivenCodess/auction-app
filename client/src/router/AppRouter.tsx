@@ -1,23 +1,43 @@
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
+import { useAuthStore } from "../hooks";
 import { LoginPage, RegisterPage } from "../auth";
-import Products from "../products/pages/Products";
-import { useState } from "react";
+import UserPage from "../user/pages/UserPage";
 
 const AppRouter = () => {
-  const [authStatus, setAuauthStatus] = useState("not-authenticated");
+  const { status, checkAuthToken } = useAuthStore();
+
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
+
+  if (status === "checking")
+    return (
+      <>
+        <ToastContainer />
+        <h3>Loading...</h3>
+      </>
+    );
 
   return (
-    <Routes>
-      {authStatus === "not-authenticated" ? (
-        <Route path="/auth/login" element={<LoginPage />} />
-      ) : (
-        <Route path="/" element={<Products />} />
-      )}
+    <>
+      <ToastContainer />
+      <Routes>
+        {status === "not-authenticated" ? (
+          <Route path="/auth/login" element={<LoginPage />} />
+        ) : (
+          <>
+            <Route path="/user" element={<UserPage />} />
+            <Route path="/*" element={<Navigate to={"/user"} />} />
+          </>
+        )}
 
-      <Route path="/auth/register" element={<RegisterPage />} />
-      <Route path="/*" element={<Navigate to={"/auth/login"} />} />
-    </Routes>
+        <Route path="/auth/register" element={<RegisterPage />} />
+        <Route path="/*" element={<Navigate to={"/auth/login"} />} />
+      </Routes>
+    </>
   );
 };
 
