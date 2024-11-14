@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuthStore } from "../../hooks";
 
 import useForm from "../../hooks/useForm";
-import styles from "../styles/LoginPage.module.css";
+import { authPageCSS } from "../../styles";
 
 const LoginPage = () => {
   const { email, password, onInputChange, onResetForm } = useForm({
@@ -23,7 +23,7 @@ const LoginPage = () => {
   return (
     <>
       <h1>Login</h1>
-      <form action="" onSubmit={handleSubmit} className={styles.formState}>
+      <form action="" onSubmit={handleSubmit} className={authPageCSS.formState}>
         <label htmlFor="">
           Email
           <input

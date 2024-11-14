@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 
 import { store } from "./store";
 import AppRouter from "./router/AppRouter";
-import "./App.css";
+import "./styles/App.css";
 
 const App = () => {
   return (

@@ -3,14 +3,14 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { useAuthStore } from "../hooks";
-import { LoginPage, RegisterPage } from "../auth";
-import UserPage from "../user/pages/UserPage";
+import { LoginPage, RegisterPage, UserPage } from "../pages/";
 
 const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
 
   useEffect(() => {
     checkAuthToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (status === "checking")

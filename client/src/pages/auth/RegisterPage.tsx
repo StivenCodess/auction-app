@@ -1,4 +1,5 @@
-import styles from "../styles/LoginPage.module.css";
+import { authPageCSS } from "../../styles/index";
+
 import useForm from "../../hooks/useForm";
 import { useAuthStore } from "../../hooks";
 
@@ -34,7 +35,7 @@ const RegisterPage = () => {
   return (
     <>
       <h1>Register</h1>
-      <form action="" onSubmit={handleSubmit} className={styles.formState}>
+      <form action="" onSubmit={handleSubmit} className={authPageCSS.formState}>
         <label htmlFor="">
           Nombre
           <input

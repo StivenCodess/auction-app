@@ -1,7 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
-import { authApi } from "../api";
 import { onChecking, onLogin, RootState, onLogout } from "../store";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
+
+import {
+  loginUser,
+  registerUser,
+  revalidateToken,
+} from "../services/userService";
+
+import { getToastMessages } from "../helpers/";
 
 interface RegisterData {
   name: string;
@@ -19,37 +27,18 @@ const useAuthStore = () => {
 
   const startLogin = async (email_user: string, password_user: string) => {
     dispatch(onChecking());
+    const toastConfig = getToastMessages("login");
 
     try {
       const { data } = await toast.promise(
-        authApi.post("/user/login", { email_user, password_user }),
-        {
-          pending: {
-            render: "Promise is pending",
-            position: "top-right",
-            autoClose: 2000,
-            transition: Bounce,
-          },
-          success: {
-            render: "Promise resolved 👌",
-            position: "top-right",
-            autoClose: 2000,
-            transition: Bounce,
-          },
-          error: {
-            render: "Promise error 👌",
-            position: "top-right",
-            autoClose: 2000,
-            transition: Bounce,
-          },
-        }
+        loginUser({ email_user, password_user }),
+        toastConfig
       );
 
       const { token, ...userData } = data;
       localStorage.setItem("token", token);
 
       dispatch(onLogin(userData));
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       dispatch(onLogout());
     }
@@ -57,14 +46,18 @@ const useAuthStore = () => {
 
   const startRegister = async (formState: RegisterData) => {
     dispatch(onChecking());
+    const toastConfig = getToastMessages("register");
 
     try {
-      const { data } = await authApi.post("/user", formState);
+      const { data } = await toast.promise(
+        registerUser(formState),
+        toastConfig
+      );
+
       localStorage.setItem("token", data.token);
       dispatch(onLogin(data.dataValues));
     } catch (error) {
       dispatch(onLogout());
-      console.log(error);
     }
   };
 
@@ -75,13 +68,13 @@ const useAuthStore = () => {
     if (!token) return dispatch(onLogout());
 
     try {
-      const { data } = await authApi.get("/user/renew");
+      const { data } = await revalidateToken();
+
       const { token, ...userData } = data;
       localStorage.setItem("token", token);
 
       dispatch(onLogin(userData));
     } catch (error) {
-      console.log(error);
       localStorage.clear();
       dispatch(onLogout());
     }
