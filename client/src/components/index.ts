@@ -1,5 +1,8 @@
 export { default as EditOffOutline } from "./icons/EditOffOutline";
 export { default as EditSquareOutline } from "./icons/EditSquareOutline";
+export { default as Upload } from "./icons/Upload";
 
 export { default as LogoutRounded } from "./icons/LogoutRounded";
 export { default as SaveRounded } from "./icons/SaveRounded";
+
+export { default as NavLayout } from "./NavLayout";

@@ -33,7 +33,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <>
+    <main className={authPageCSS.container}>
       <h1>Register</h1>
       <form action="" onSubmit={handleSubmit} className={authPageCSS.formState}>
         <label htmlFor="">
@@ -84,7 +84,7 @@ const RegisterPage = () => {
 
         <button type="submit">Register</button>
       </form>
-    </>
+    </main>
   );
 };
 

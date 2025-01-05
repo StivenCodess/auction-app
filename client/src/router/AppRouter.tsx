@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 
 import { useAuthStore } from "../hooks";
 import { LoginPage, RegisterPage, UserPage } from "../pages/";
+import { NavLayout } from "../components";
 
 const AppRouter = () => {
   const { status, checkAuthToken } = useAuthStore();
@@ -24,6 +25,7 @@ const AppRouter = () => {
   return (
     <>
       <ToastContainer />
+      <NavLayout />
       <Routes>
         {status === "not-authenticated" ? (
           <Route path="/auth/login" element={<LoginPage />} />

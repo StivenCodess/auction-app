@@ -144,11 +144,24 @@ export const updateUser = async (req, res) => {
     const { id } = req.params;
     const { name, email, address, phone, role_id, photo_url } = req.body;
 
+    if (req.authToken.uid !== id) return res.status(500).json({ ok: false });
+
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ error: "user not found" });
 
     user.update({ name, email, address, phone, role_id, photo_url });
-    res.status(200).json({ ok: true, user });
+
+    const token = generateToken({
+      uid: id,
+      name,
+      address,
+      phone,
+      email,
+      photo_url,
+      role_id,
+    });
+
+    res.status(200).json({ ok: true, user, token });
   } catch (error) {
     res.status(500).json({ error: "Failed to update user" });
   }

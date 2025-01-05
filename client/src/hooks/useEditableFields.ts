@@ -44,6 +44,7 @@ export const useEditableFields = <T extends Record<string, unknown>>(
 
     toggleEditMode,
     handleFieldChange,
+    setFields,
 
     isEditModeActive,
     isFormValid,

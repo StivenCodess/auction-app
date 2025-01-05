@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
-import { onChecking, onLogin, RootState, onLogout } from "../store";
+import {
+  onChecking,
+  onLogin,
+  RootState,
+  onLogout,
+  onUserInfoUpdate,
+} from "../store";
 import { toast } from "react-toastify";
 
 import {
   loginUser,
   registerUser,
   revalidateToken,
+  updateUser,
 } from "../services/userService";
 
 import { getToastMessages } from "../helpers/";
@@ -71,13 +78,32 @@ const useAuthStore = () => {
       const { data } = await revalidateToken();
 
       const { token, ...userData } = data;
+
       localStorage.setItem("token", token);
 
       dispatch(onLogin(userData));
     } catch (error) {
+      console.log(error);
       localStorage.clear();
       dispatch(onLogout());
     }
+  };
+
+  const startUpdateUserInfo = async (uid, user) => {
+    try {
+      const response = await updateUser(uid || "", user);
+
+      updateToken(response.token);
+      dispatch(onUserInfoUpdate(user));
+      return { ok: true };
+    } catch (error) {
+      return { ok: false };
+    }
+  };
+
+  const updateToken = (token) => {
+    localStorage.clear();
+    localStorage.setItem("token", token);
   };
 
   const startLogout = async () => {
@@ -94,6 +120,7 @@ const useAuthStore = () => {
     startRegister,
     startLogout,
     checkAuthToken,
+    startUpdateUserInfo,
   };
 };
 

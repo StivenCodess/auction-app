@@ -7,9 +7,8 @@ import { userPageCSS } from "../../styles";
 import { useDispatch } from "react-redux";
 import { onUserInfoUpdate } from "../../store";
 import cloudinaryApi from "../../api/cloudinaryAPI";
-import { updateUser } from "../../services/userService";
 
-import { SaveRounded, LogoutRounded } from "../../components/";
+import { SaveRounded, Upload } from "../../components/";
 import { useEditableFields } from "../../hooks/useEditableFields";
 import EditableField from "../../components/EditableField";
 
@@ -24,7 +23,7 @@ const validationRules = {
 
 const UserPage = () => {
   const dispatch = useDispatch();
-  const { user, startLogout } = useAuthStore();
+  const { user, startUpdateUserInfo } = useAuthStore();
 
   const {
     fields,
@@ -34,6 +33,7 @@ const UserPage = () => {
     isFormValid,
     isEditModeActive,
     errors,
+    setFields,
   } = useEditableFields(user, validationRules);
 
   const handleUploadImage = async (
@@ -55,11 +55,13 @@ const UserPage = () => {
       );
       const uploadedUrl = response.data.secure_url;
 
-      const responseUpdate = await updateUser(user.uid || "", {
+      const responseUpdateImage = await startUpdateUserInfo(user.uid, {
+        ...user,
         photo_url: uploadedUrl,
       });
 
-      if (!responseUpdate.ok) return;
+      if (!responseUpdateImage.ok) return;
+      setFields({ ...fields, photo_url: uploadedUrl });
 
       const updatedUser = { ...user, photo_url: uploadedUrl };
       dispatch(onUserInfoUpdate(updatedUser));
@@ -76,34 +78,35 @@ const UserPage = () => {
     if (!isFormValid) return;
 
     const toastConfig = getToastMessages("update_user");
-    const response = await toast.promise(
-      updateUser(uid || "", updatedUserInfo),
-      toastConfig
-    );
-
-    dispatch(onUserInfoUpdate(response.user));
+    await toast.promise(startUpdateUserInfo(uid, updatedUserInfo), toastConfig);
   };
 
   return (
     <>
-      <h1>User Page</h1>
       <h3>Bienvenido {user.name}</h3>
 
       <div className={userPageCSS.info__container}>
-        {user.photo_url && (
-          <img
-            src={user.photo_url}
-            alt="Avatar"
-            className={userPageCSS.avatar__image}
-          />
-        )}
+        <div className={userPageCSS.image__container}>
+          {user.photo_url && (
+            <img
+              src={user.photo_url}
+              alt="Avatar"
+              className={userPageCSS.avatar__image}
+            />
+          )}
 
-        <input
-          type="file"
-          name="avatar_file"
-          placeholder="Upload avatar"
-          onChange={handleUploadImage}
-        />
+          <label htmlFor="file_upload" className={userPageCSS.input__file}>
+            <Upload className={userPageCSS.upload__icon} />
+          </label>
+
+          <input
+            id="file_upload"
+            type="file"
+            name="avatar_file"
+            placeholder="Upload avatar"
+            onChange={handleUploadImage}
+          />
+        </div>
       </div>
 
       <form onSubmit={handleSaveSubmit} className={userPageCSS.info__container}>
@@ -152,10 +155,6 @@ const UserPage = () => {
           <SaveRounded /> Save
         </button>
       </form>
-
-      <button onClick={() => startLogout()}>
-        <LogoutRounded /> Logout
-      </button>
     </>
   );
 };

@@ -21,7 +21,7 @@ const LoginPage = () => {
   };
 
   return (
-    <>
+    <main className={authPageCSS.container}>
       <h1>Login</h1>
       <form action="" onSubmit={handleSubmit} className={authPageCSS.formState}>
         <label htmlFor="">
@@ -45,7 +45,7 @@ const LoginPage = () => {
 
         <button type="submit">Login</button>
       </form>
-    </>
+    </main>
   );
 };
 

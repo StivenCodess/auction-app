@@ -23,7 +23,7 @@ router.post("/user/login", checkSchema(loginSchema), loginUser);
 
 router.get("/users", getUsers);
 router.get("/users/:id", getUserByIndex);
-router.put("/users/:id", updateUser);
+router.put("/users/:id", revalidateToken, updateUser);
 router.delete("/users/:id", deleteUser);
 
 router.get("/user/renew", revalidateToken, revalidateTokenController);
